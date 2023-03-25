@@ -1,0 +1,75 @@
+---
+title: "591Project"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+RequiredPackages <- c("igraph")
+
+for (pkg in RequiredPackages) {
+  if (pkg %in% rownames(installed.packages()) == FALSE)
+  {install.packages(pkg)}
+  if (pkg %in% rownames(.packages()) == FALSE)
+  {library(pkg, character.only = TRUE)}
+}
+```
+
+```{r}
+t3path <- "/Users/funsooje/Documents/GitHub/NWmath/NWhy/build/bench/datasets/sline/top3nodes.csv"
+
+t3 <- read.csv(t3path)
+
+```
+
+```{r}
+for (row in 1:nrow(t3)) {
+  s <- as.integer(t3[row, "s"])
+  node1 <- as.integer(t3[row, "node1"]) + 1
+  node2 <- as.integer(t3[row, "node2"]) + 1
+  node3 <- as.integer(t3[row, "node3"]) + 1
+  
+  gPath <- paste("/Users/funsooje/Documents/GitHub/NWmath/NWhy/build/bench/datasets/sline/", s, ".edges", sep = "")
+  jpegP <- paste("/Users/funsooje/Documents/GitHub/NWmath/NWhy/build/bench/datasets/jpegs/", s, ".jpg", sep = "")
+  
+  g = read_graph(gPath, "edgelist")
+  
+  V(g)$color <- ifelse(V(g) == node1, "red", 
+                      ifelse(V(g) == node2, "green", 
+                        ifelse(V(g) == node3, "blue", "gray")))
+  
+  V(g)$size <- ifelse(V(g) == node1, 20, 
+                      ifelse(V(g) == node2, 15, 
+                        ifelse(V(g) == node3, 10, 2)))
+  
+  jpeg(jpegP)
+  plot(g, layout=layout_with_kk, vertex.color=V(g)$color, vertex.size=V(g)$size)
+  dev.off()
+    
+  # if (s < 20){ break }
+}
+```
+
+
+
+```{r}
+
+i = 120
+
+gPath <- paste("/Users/funsooje/Documents/GitHub/NWmath/NWhy/build/bench/datasets/sline/", i, ".edges", sep = "")
+g = read_graph(gPath, "edgelist")
+
+V(g)$color <- ifelse(V(g) == 1, "blue", 
+                    ifelse(V(g) == 2, "green", 
+                      ifelse(V(g) == 3, "yellow", "red")))
+
+V(g)$size <- ifelse(V(g) == 1, 15, 
+                    ifelse(V(g) == 2, 15, 
+                      ifelse(V(g) == 3, 15, 10)))
+
+
+plot(g, layout=layout_with_kk, vertex.color=V(g)$color, vertex.size=V(g)$size)
+```
+
+# Test
